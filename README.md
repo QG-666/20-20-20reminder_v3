@@ -14,4 +14,5 @@ To run this application, you need to install the following Python libraries:
 
 You can install the required libraries using the following command:
 
+```bash
 pip install ttkbootstrap pystray pillow
