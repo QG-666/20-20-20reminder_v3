@@ -10,47 +10,50 @@ class TimerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("20-20-20 Reminder")
-        self.root.geometry("600x750")
+        self.root.geometry("600x600")
 
-        # 禁用最大化按钮
+        # Disable window resizing
         self.root.resizable(False, False)
 
-        # 设置主界面的自定义图标
+        # Set custom icon for the main window
         self.icon = Image.open("icon2.png")
         self.tk_icon = ImageTk.PhotoImage(self.icon)
         self.root.iconphoto(False, self.tk_icon)
 
-        self.remaining_time = 1 * 60  # 20 minutes in seconds
+        self.total_time = 1 * 60  # 20 minutes in seconds
+        self.remaining_time = self.total_time
         self.running = False
 
-        self.label = ttk.Label(root, text=self.format_time(self.remaining_time), font=("Helvetica", 48))
-        self.label.pack(pady=10)
-
+        # Create a meter to display remaining time
         self.meter = ttk.Meter(root,
                                metersize=250,
-                               amounttotal=1 * 60,
+                               amounttotal=self.total_time,
                                amountused=self.remaining_time,
                                bootstyle=SUCCESS,
                                showtext=False,
                                subtext=self.format_time(self.remaining_time),
-                               subtextstyle=SUCCESS,
+                               subtextstyle=DARK,
                                subtextfont=("Helvetica", 48)
-
                                )
-        self.meter.pack(pady=15)
+        self.meter.pack(pady=25)
 
+        # Create a frame for buttons
         button_frame = ttk.Frame(root)
         button_frame.pack(pady=10)
 
+        # Start button
         self.start_button = ttk.Button(button_frame, text="Start", command=self.start_timer, bootstyle=SUCCESS)
         self.start_button.pack(side=ttk.LEFT, padx=5)
 
+        # Reset button
         self.reset_button = ttk.Button(button_frame, text="Reset", command=self.reset_timer, bootstyle=WARNING)
         self.reset_button.pack(side=ttk.LEFT, padx=5)
 
-        self.minimize_button = ttk.Button(button_frame, text="Minimize", command=self.minimize_window, bootstyle=INFO)
+        # Minimize button
+        self.minimize_button = ttk.Button(button_frame, text="Hide", command=self.minimize_window, bootstyle=INFO)
         self.minimize_button.pack(side=ttk.LEFT, padx=5)
 
+        # Quit button
         self.quit_button = ttk.Button(button_frame, text="Quit", command=self.quit_app, bootstyle=DANGER)
         self.quit_button.pack(side=ttk.LEFT, padx=5)
 
@@ -58,7 +61,7 @@ class TimerApp:
         self.setup_tray()
         self.update_timer()
 
-        # 重载窗口关闭事件
+        # Override window close event
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def on_closing(self):
@@ -74,17 +77,15 @@ class TimerApp:
         self.update_timer()
 
     def reset_timer(self):
-        self.remaining_time = 1 * 60  # Reset to 20 minutes
+        self.remaining_time = self.total_time  # Reset to 20 minutes
         self.running = False
-        self.label.config(text=self.format_time(self.remaining_time))
-        self.meter.configure(amountused=self.remaining_time,subtext=self.format_time(self.remaining_time))
+        self.meter.configure(amountused=self.remaining_time, subtext=self.format_time(self.remaining_time))
 
     def update_timer(self):
         if self.running:
             elapsed_time = time.time() - self.start_time
-            self.remaining_time = max(0, 1 * 60 - int(elapsed_time))
-            self.label.config(text=self.format_time(self.remaining_time))
-            self.meter.configure(amountused=self.remaining_time,subtext=self.format_time(self.remaining_time))
+            self.remaining_time = max(0, self.total_time - int(elapsed_time))
+            self.meter.configure(amountused=self.remaining_time, subtext=self.format_time(self.remaining_time))
             if self.remaining_time == 0:
                 self.running = False
                 self.show_reminder()
@@ -118,20 +119,20 @@ class TimerApp:
 
         self.play_sound()
 
-        # 更新窗口以获取其宽度和高度
+        # Update window to get its width and height
         self.reminder_window.update_idletasks()
         window_width = self.reminder_window.winfo_width()
         window_height = self.reminder_window.winfo_height()
 
-        # 获取屏幕宽度和高度
+        # Get screen width and height
         screen_width = self.reminder_window.winfo_screenwidth()
         screen_height = self.reminder_window.winfo_screenheight()
 
-        # 计算窗口的x和y坐标
+        # Calculate x and y coordinates to center the window
         x = (screen_width // 2) - (window_width // 2)
         y = (screen_height // 2) - (window_height // 2)
 
-        # 设置窗口位置
+        # Set window position
         self.reminder_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
     def setup_tray(self):
@@ -150,6 +151,6 @@ class TimerApp:
         self.root.deiconify()
 
 if __name__ == "__main__":
-    root = ttk.Window(themename="litera")  # 选择一个主题
+    root = ttk.Window(themename="litera")  # Choose a theme
     app = TimerApp(root)
     root.mainloop()
