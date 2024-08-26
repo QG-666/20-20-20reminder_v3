@@ -1,6 +1,6 @@
 # 20-20-20 Reminder
 
-Quike look:
+##Quike look:
 
 This is a simple application to remind you to take a 20-second break every 20 minutes and look at something 20 feet away.
 
@@ -18,9 +18,10 @@ You can install the required libraries using the following command:
 
 ```bash
 pip install ttkbootstrap pystray pillow
+```
 
 
-Full detail:
+##Full detail:
 
 ## Overview
 
