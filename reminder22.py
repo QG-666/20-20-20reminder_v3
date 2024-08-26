@@ -20,7 +20,7 @@ class TimerApp:
         self.tk_icon = ImageTk.PhotoImage(self.icon)
         self.root.iconphoto(False, self.tk_icon)
 
-        self.total_time = 1 * 60  # 20 minutes in seconds
+        self.total_time = 20 * 60  # 20 minutes in seconds
         self.remaining_time = self.total_time
         self.running = False
 
@@ -114,8 +114,29 @@ class TimerApp:
         message_icon = ImageTk.PhotoImage(self.icon)
         self.reminder_window.iconphoto(False, message_icon)
 
-        label = ttk.Label(self.reminder_window, text="Take a 20-second break and look at something 20 feet away!")
-        label.pack(pady=20, padx=20)
+        frame = ttk.Frame(self.reminder_window, padding=20, bootstyle="litera")
+        frame.pack(fill="both", expand=True)
+
+        # Add an icon to the reminder window
+        message_icon = ImageTk.PhotoImage(self.icon)
+        icon_label = ttk.Label(frame, image=message_icon)
+        icon_label.image = message_icon  # Keep a reference to avoid garbage collection
+        icon_label.pack(side="left", padx=10)
+
+        # Add a label with the reminder message
+        label = ttk.Label(frame,
+                          text="Time's up!\nTake a 20-second break\nand look at something 20 feet away!",
+                          font=("Helvetica", 14),
+                          bootstyle="litera")
+        label.pack(side="top", padx=10)
+
+        # Add a close button
+        close_button = ttk.Button(frame,
+                                  text="Close",
+                                  command=self.reminder_window.destroy,
+                                  bootstyle="danger",
+                                  width=10)
+        close_button.pack(side="bottom")
 
         self.play_sound()
 
