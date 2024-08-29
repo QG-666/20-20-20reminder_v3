@@ -16,7 +16,7 @@ class TimerApp:
         self.root.resizable(False, False)
 
         # Set custom icon for the main window
-        self.icon = Image.open("icon2.png")
+        self.icon = Image.open("twenty_reminder_icon.png")
         self.tk_icon = ImageTk.PhotoImage(self.icon)
         self.root.iconphoto(False, self.tk_icon)
 
@@ -103,7 +103,7 @@ class TimerApp:
         self.root.quit()
 
     def play_sound(self):
-        winsound.PlaySound("level-up-191997.wav", winsound.SND_FILENAME | winsound.SND_ASYNC)
+        winsound.PlaySound("twenty_reminder_sound.wav", winsound.SND_FILENAME | winsound.SND_ASYNC)
 
     def show_reminder(self):
         if self.reminder_window is not None and self.reminder_window.winfo_exists():
